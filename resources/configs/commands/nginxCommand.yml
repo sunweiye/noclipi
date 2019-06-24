@@ -1,0 +1,66 @@
+command:
+  name: nginx
+  description: Execute an automation job for nginx.
+
+  definitions:
+    - name: command
+      defaultOption: true
+      hideInHelp: true
+
+    - name: help
+      alias: h
+      type: Boolean
+      defaultValue: false
+      description: Show the help content of the given command.
+
+  subCommands:
+    - name: redirect
+      description: Write the redirects urls in an specified excel file to the target file
+      definitions:
+        - name: source
+          alias: s
+          type: String
+          description: The source file for redirect configurations.
+          typeLabel: <file>
+
+        - name: target
+          alias: t
+          type: String
+          description: The target file for the configuration outputs.
+          typeLabel: <file>
+
+        - name: base-url
+          alias: B
+          type: String
+          description: The base url.
+
+        - name: prefixes
+          alias: P
+          type: String
+          description: The prefixes for the url, for example the languages. The items should be separated with comma, e.x "en, de, fr".
+
+      usageContents:
+        - header: 'Node Tools Application: nginx redirect'
+          content: 'Generate redirect configuration from excel file'
+
+        - header: 'Usage'
+          content: 'ts-node src/index.ts nginx redirect <options>'
+
+        - header: 'Command options'
+          optionsListGenerator: CommandDefinitions
+
+  usageContents:
+    - header: 'Node Tools Application: nginx'
+      content: 'Execute an automation job for nginx.'
+
+    - header: 'Usage'
+      content: 'ts-node src/index.ts nginx <command> <options>'
+
+    - header: 'Command List'
+      contentGernerator: UsageContentsForCommands
+
+    - header: 'Command options'
+      optionsListGenerator: CommandDefinitions
+
+    - header: 'Show help information of a command'
+      content: 'ts-node src/index.ts nginx -h <command>'

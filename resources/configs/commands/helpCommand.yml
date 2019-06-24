@@ -1,0 +1,20 @@
+command:
+  name: help
+  description: Display help information of the this tools application.
+
+  definitions:
+    - name: command
+      alias: c
+      type: String
+      defaultOption: true
+      description: Show the help content of the given command.
+
+  usageContents:
+    - header: 'Node Tools Application Command: help'
+      content: 'The help command of the node application.'
+
+    - header: 'Usage'
+      content: 'ts-node src/index.ts help <options>'
+
+    - header: 'Help command options'
+      optionsListGenerator: CommandDefinitions

@@ -1,0 +1,18 @@
+{
+  "name": "noclipi",
+  "version": "0.1.0",
+  "description": "A node.js CLI framework",
+  "author": "Weiye Sun",
+  "license": "MIT",
+  "dependencies": {
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^5.0.5",
+    "js-yaml": "^3.13.1",
+    "xlsx": "^0.14.3"
+  },
+  "devDependencies": {
+    "@types/node": "^12.0.8",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  }
+}

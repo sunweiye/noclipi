@@ -1,0 +1,17 @@
+application:
+  arguments:
+    definitions:
+      - name: command
+        defaultOption: true
+        defaultValue: help
+    # TODO: Add the option support for the application itself, e.x. --version
+
+  usageContents:
+    - header: 'Node Tools Application'
+      content: 'An node application contains some tools.'
+
+    - header: 'Usage'
+      content: 'ts-node src/index.ts <command> <subcommand> <options>'
+
+    - header: 'Command List'
+      contentGernerator: UsageContentsForCommands
