@@ -15,7 +15,8 @@ class ArgumentsParser {
 
     public parse(): string {
         let argumentsConfiguration = Configuration.getInstance().getConfig('arguments'),
-            commandsList = Configuration.getInstance().getConfig('commandsList'),
+            configurationInstance = Configuration.getInstance(),
+            commandsList = configurationInstance.getConfig('commandsList'),
             definitions = argumentsConfiguration.definitions,
             mainArguments = commandLineArgs(definitions, {stopAtFirstUnknown: true}),
             mainOptions = mainArguments._unknown || [],
@@ -26,7 +27,7 @@ class ArgumentsParser {
             command = this.getDefaultCommand(definitions);
         }
 
-        return this.parseCommand(commandsList.get(command), mainOptions);
+        return this.parseCommand(configurationInstance.getResolvedCommandConfiguration(command), mainOptions);
     }
 
     private getDefaultCommand(definitions: any): string {
@@ -38,9 +39,9 @@ class ArgumentsParser {
         return '';
     }
 
-    private parseCommand(configuration: any, commandArgumentsInput: any): string {
-        Configuration.parseDefinitionsType(configuration.definitions);
-        let {name, definitions, subCommands} = configuration,
+    private parseCommand(commandConfiguration: any, commandArgumentsInput: any): string {
+        Configuration.parseDefinitionsType(commandConfiguration.definitions);
+        let {name, definitions, subCommands} = commandConfiguration,
             commandArguments = commandLineArgs(definitions ? definitions : [], {argv: commandArgumentsInput, stopAtFirstUnknown: true});
 
         if(Array.isArray(subCommands)) {

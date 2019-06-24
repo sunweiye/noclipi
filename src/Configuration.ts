@@ -55,6 +55,41 @@ class Configuration {
         return this.configs.get(name);
     }
 
+    public getResolvedCommandConfiguration(commandName: string): any {
+        let commandConfiguration = this.configs.get('commandsList').get(commandName);
+        if(commandConfiguration.definitions) {
+            Configuration.parseDefinitionsType(commandConfiguration.definitions);
+        } else {
+            commandConfiguration.definitions = [];
+        }
+
+        if(commandConfiguration.subCommands && commandConfiguration.subCommands.hasOwnProperty('includes')) {
+            // TODO: Support the configuration of dir
+            let {files, dir} = commandConfiguration.subCommands.includes;
+            if(files) {
+                if(typeof files === 'string') {
+                    files = [files];
+                }
+                if(!Array.isArray(files)) {
+                    global.exitWithError(`The configuration for the included files in the 'subCommands' of command '${commandName}' must be a path or an array of paths `);
+                }
+            }
+
+            commandConfiguration.subCommands = files.map((file: string) => {
+                if (!global.isFileOfFormat(file, 'yaml')) {
+                    global.exitWithError(`The value '${file}' for the file in 'subCommands' of command '${commandName}' is not a yaml file`);
+                }
+
+                try {
+                    return yaml.safeLoad(fs.readFileSync(Configuration.COMMAND_CONFIG_DIR_PATH + '/' + file, 'utf8')).command;
+                } catch (e) {
+                    global.exitWithError(e);
+                }
+            });
+        }
+        return commandConfiguration;
+    }
+
     public getUsageContentsForCommands(commandName: string = ''): Array<object> {
         let command = this.configs.get('commandsList').get(commandName);
         if (command) {
