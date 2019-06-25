@@ -40,6 +40,7 @@ class HelpCommand implements Command {
     private printUsageContent(usageContents: Array<any>, command: any = null): void {
         for (let usage of usageContents) {
             if (usage.contentGernerator && typeof usage.contentGernerator === 'string') {
+                this.configuration.getResolvedCommandConfiguration(this.helpOfCommand);
                 usage.content = (<any> this.configuration)['get' + usage.contentGernerator](this.helpOfCommand);
                 delete usage.contentGernerator;
             }
