@@ -13,8 +13,6 @@ type Interval = {
 class RedirectCommand implements Command{
     readonly name: string = 'redirect';
 
-    private workbook: WorkBook;
-
     private sources: Array<string>;
 
     private targetFile: WriteStream;
