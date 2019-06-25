@@ -2,9 +2,10 @@ command:
   name: redirect
   description: Write the redirects urls in an specified excel file to the target file
   definitions:
-    - name: source
+    - name: sources
       alias: s
       type: String
+      multiple: true
       description: The source file for redirect configurations.
       typeLabel: <file>
 

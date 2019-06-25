@@ -15,6 +15,8 @@ class RedirectCommand implements Command{
 
     private workbook: WorkBook;
 
+    private sources: Array<string>;
+
     private targetFile: WriteStream;
 
     private urlConstructorParameters: Array<any> = [];
@@ -26,19 +28,19 @@ class RedirectCommand implements Command{
     private errorItems: number = 0;
 
     resolveArguments(args: any): void {
-        let {source, target, prefixes} = args;
+        let {sources, target, prefixes} = args;
 
-        if(!source) {
-            this.throwInvalidArgumentError('source');
+        if(!sources || sources.length === 0) {
+            this.throwInvalidArgumentError('sources');
         }
         if(!target) {
             this.throwInvalidArgumentError('target');
         }
 
         try {
-            this.workbook = readFile(path.resolve(source), {})
+            this.sources = sources.map((file: string) => path.resolve(file));
         } catch (e) {
-            global.exitWithError(`${e.message}\nPlease check if the source file '${source}' is a valid excel file.`);
+            global.exitWithError(`${e.message}\nPlease check make sure valid excel files are given to the source option.`);
         }
 
         this.targetFile = fs.createWriteStream(path.resolve(target), {flags: 'a'});
@@ -56,14 +58,22 @@ class RedirectCommand implements Command{
     }
 
     execute(): void {
-        this.targetFile.write('\n');        // Always start with a new line
-        for(let sheetName of this.workbook.SheetNames) {
-            let sheet: WorkSheet = (<any> this.workbook.Sheets)[sheetName];
-            if(sheet !== undefined && sheet['!ref'] !== undefined) {
-                this.generateRedirectsInSheet(sheet, sheetName);
-            }
-        }
+        this.sources.forEach((source) => {
+            this.targetFile.write('\n');        // Always start with a new line
 
+            try {
+                let workbook: WorkBook = readFile(source, {});
+                console.log(`\nCreate the redirects from file ${source} ...`);
+                for(let sheetName of workbook.SheetNames) {
+                    let sheet: WorkSheet = (<any> workbook.Sheets)[sheetName];
+                    if(sheet !== undefined && sheet['!ref'] !== undefined) {
+                        this.generateRedirectsInSheet(sheet, sheetName);
+                    }
+                }
+            } catch (e) {
+                console.log(`Error occurs by reading file ${source}:\n${e.message}`);
+            }  
+        });
         console.log(`Finish to write redirect configuration to file ${this.targetFile.path} with ${this.successItems} redirects. ${this.errorItems} failed.`);
     }
 
