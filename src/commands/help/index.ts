@@ -40,7 +40,9 @@ class HelpCommand implements Command {
     private printUsageContent(usageContents: Array<any>, command: any = null): void {
         for (let usage of usageContents) {
             if (usage.contentGernerator && typeof usage.contentGernerator === 'string') {
-                this.configuration.getResolvedCommandConfiguration(this.helpOfCommand);
+                if(this.helpOfCommand) {
+                    this.configuration.getResolvedCommandConfiguration(this.helpOfCommand);
+                }
                 usage.content = (<any> this.configuration)['get' + usage.contentGernerator](this.helpOfCommand);
                 delete usage.contentGernerator;
             }
@@ -54,6 +56,10 @@ class HelpCommand implements Command {
 
     private getHelpOfCommand(subCommandName: string | null = null): any {
         let command = this.configuration.getConfig('commandsList').get(this.helpOfCommand);
+        if(!command) {
+            global.exitWithError(`The command '${this.helpOfCommand}' is not a valid command.`);
+        }
+
         if(subCommandName) {
             for(let subCommand of command.subCommands) {
                 if(subCommand.name === subCommandName) {
