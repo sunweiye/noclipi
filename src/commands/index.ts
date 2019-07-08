@@ -1,6 +1,7 @@
 import {Command} from './Command';
 import {NginxCommand} from "./nginx";
 import {HelpCommand} from "./help";
+import {LocalizationCommand} from "./localization";
 
 type CommandsList = Record<string, Function>
 
@@ -35,5 +36,6 @@ abstract class CommandFactory {
 // TODO: Use namespace for the commands and enable the add in the configuration by reading yaml
 CommandFactory.addCommandToList('nginx', NginxCommand);
 CommandFactory.addCommandToList('help', HelpCommand);
+CommandFactory.addCommandToList('localization', LocalizationCommand);
 
 export {CommandFactory};

@@ -1,0 +1,35 @@
+command:
+  name: localization
+  description: Jobs for localization.
+
+  definitions:
+    - name: command
+      defaultOption: true
+      hideInHelp: true
+
+    - name: help
+      alias: h
+      type: Boolean
+      defaultValue: false
+      description: Show the help content of the given command.
+
+  subCommands:
+    includes:
+      files:
+        - localization/xliffCommand.yml
+
+  usageContents:
+    - header: 'Node Tools Application: localization'
+      content: 'Execute a job for localization.'
+
+    - header: 'Usage'
+      content: 'ts-node src/index.ts localization <command> <options>'
+
+    - header: 'Command List'
+      contentGernerator: UsageContentsForCommands
+
+    - header: 'Command options'
+      optionsListGenerator: CommandDefinitions
+
+    - header: 'Show help information of a command'
+      content: 'ts-node src/index.ts localization -h <command>'

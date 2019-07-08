@@ -1,18 +1,18 @@
 import {Command} from '../Command';
-import {HelpCommand} from "../help";
-import {RedirectCommand} from "./redirectCommand";
+import {XliffCommand} from "./xliffCommand";
 import {IllegalArgumentError} from "../../Error";
+import {HelpCommand} from "../help";
 
-class NginxCommand implements Command {
-    readonly name: string = 'nginx';
+class LocalizationCommand implements Command {
+    readonly name: string = 'localization';
 
     private static subCommandsList = {
-        redirect: RedirectCommand
+        xliff: XliffCommand
     };
 
     private static getSubCommandByName(commandName: string): Command {
-        if((<any> NginxCommand.subCommandsList)[commandName]) {
-            return new (<any> NginxCommand.subCommandsList)[commandName]();
+        if((<any> LocalizationCommand.subCommandsList)[commandName]) {
+            return new (<any> LocalizationCommand.subCommandsList)[commandName]();
         }
 
         throw new IllegalArgumentError(`Unknown command '${commandName}'.`);
@@ -26,7 +26,7 @@ class NginxCommand implements Command {
         this.showHelp = args.help;
         if(args.command) {
             try {
-                this.subCommand = NginxCommand.getSubCommandByName(args.command);
+                this.subCommand = LocalizationCommand.getSubCommandByName(args.command);
                 if(!this.showHelp) {
                     this.subCommand.resolveArguments(args.subCommandOptions);
                 }
@@ -48,4 +48,4 @@ class NginxCommand implements Command {
     }
 }
 
-export {NginxCommand};
+export {LocalizationCommand};

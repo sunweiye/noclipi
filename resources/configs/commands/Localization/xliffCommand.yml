@@ -1,0 +1,33 @@
+command:
+  name: xliff
+  description: Generate the xliff contents from excel
+
+  definitions:
+    - name: source
+      alias: s
+      type: String
+      description: The excel file for the language contents
+      typeLabel: <file>
+
+    - name: target
+      alias: t
+      type: String
+      description: The target file for the language contents outputs. A question mark can be used for the file name with language key, e.x. /path/to/xliff/file/?.lang.xlf
+      typeLabel: <file>
+
+    - name: languages
+      alias: l
+      type: String
+      multiple: true
+      description: The language keys
+      typeLabel: <language_key>
+
+  usageContents:
+    - header: 'Node Tools Application: localization xliff generator'
+      content: 'Generate xliff language content from excel file'
+
+    - header: 'Usage'
+      content: 'ts-node src/index.ts localization xliff <options>'
+
+    - header: 'Command options'
+      optionsListGenerator: CommandDefinitions
