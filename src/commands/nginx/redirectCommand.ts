@@ -99,8 +99,8 @@ class RedirectCommand implements Command{
     }
 
     private buildRedirectForUrl(theOld: string, theNew: string): void {
-        let theOldUrl = new URL(theOld, ...this.urlConstructorParameters),
-            theNewUrl = new URL(theNew, ...this.urlConstructorParameters);
+        let theOldUrl = new URL(theOld.replace(/\u200B/g,''), ...this.urlConstructorParameters),
+            theNewUrl = new URL(theNew.replace(/\u200B/g,''), ...this.urlConstructorParameters);
 
         for(let prefix of this.prefixes) {
             this.targetFile.write(`rewrite ^\\${prefix + theOldUrl.pathname.replace(/\./g, '\\.') + theOldUrl.search} ${prefix + theNewUrl.pathname + theNewUrl.search} permanent;\n`);
