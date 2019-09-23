@@ -99,11 +99,28 @@ class RedirectCommand implements Command{
     }
 
     private buildRedirectForUrl(theOld: string, theNew: string): void {
-        let theOldUrl = new URL(theOld.replace(/\u200B/g,''), ...this.urlConstructorParameters),
-            theNewUrl = new URL(theNew.replace(/\u200B/g,''), ...this.urlConstructorParameters);
+        let theNewUrl = new URL(theNew.replace(/\u200B/g,''), ...this.urlConstructorParameters),
+            errors: Array<Error> = [];
 
-        for(let prefix of this.prefixes) {
-            this.targetFile.write(`rewrite ^\\${prefix + theOldUrl.pathname.replace(/\./g, '\\.') + theOldUrl.search} ${prefix + theNewUrl.pathname + theNewUrl.search} permanent;\n`);
+        theOld.split(/[\n|\r]+/gm).forEach((urlItem: string) => {
+            urlItem = urlItem.replace(/\u200B/g,'').trim();
+            try {
+                if(urlItem.length === 0) {
+                    return;
+                }
+                let theOldUrl = new URL(urlItem, ...this.urlConstructorParameters);
+                for(let prefix of this.prefixes) {
+                    this.targetFile.write(`rewrite ^\\${prefix + theOldUrl.pathname.replace(/\./g, '\\.') + theOldUrl.search} ${prefix + theNewUrl.pathname + theNewUrl.search} permanent;\n`);
+                }
+            } catch (e) {
+                errors.push(e);
+            }
+        });
+
+        if(errors.length > 0) {
+            throw new Error(
+                errors.reduce((messsage: string, error: Error) => messsage + error.message + '\n', '')
+            );
         }
     }
 
