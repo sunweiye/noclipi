@@ -35,8 +35,17 @@ to show the help information of the given subcommand.
 
 #### Sub Commands
 ##### `reirect`
-This command will create the redirects of nginx by given excel file.
+This command will create or check the redirects of nginx by given excel file.
 
     ts-node src/index.ts nginx redirect <options>
 
+Examples:
+- Create redirect configuration from excel file with language prefixes and ignore the first line of excel sheet:
+    ```
+    ts-node src/index.ts nginx redirect -s ./redirects.xlsx -t ./redirects.conf -P ", de, fr, es, cn" -i "1"
+    ```
+- Check the redirects, if there work as excepted
+    ```
+    ts-node src/index.ts nginx redirect -s ./redirects.xlsx -C -P ", de, fr, es, cn" -i "1" -B "https://your.domain/"
+    ```
 ## Add new Job/Command

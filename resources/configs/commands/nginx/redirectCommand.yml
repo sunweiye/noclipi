@@ -25,6 +25,17 @@ command:
       type: String
       description: The prefixes for the url, for example the languages. The items should be separated with comma, e.x "en, de, fr".
 
+    - name: check
+      alias: C
+      type: Boolean
+      defaultValue: false
+      description: Check the redirect settings
+
+    - name: ignore-lines
+      alias: i
+      type: String
+      description: The lines that should be ignored in the excel file. The items should be separated with comma, e.x "1, 3, 5".
+
   usageContents:
     - header: 'Node Tools Application: nginx redirect'
       content: 'Generate redirect configuration from excel file'
