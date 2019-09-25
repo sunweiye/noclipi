@@ -27,6 +27,8 @@ class RedirectCommand implements Command {
 
     private ignoredLines: Set<Number> = new Set<Number>();
 
+    private extraArguments: any = {};
+
     private successItems: number = 0;
 
     private errorItems: number = 0;
@@ -69,6 +71,28 @@ class RedirectCommand implements Command {
 
         if (args['base-url']) {
             this.urlConstructorParameters = [args['base-url']];
+        }
+
+        if (args['extra-args']) {
+            let inputArgs:string = args['extra-args'].trim(),
+                argumentsObj: any = {};
+            if (inputArgs.length > 0) {
+                try {
+                    argumentsObj = JSON.parse(inputArgs);
+                } catch (e) {
+                    args['extra-args'].match(/\S+/g).forEach((argument:string) => {
+                        let [key, value] = argument.split('=');
+                        argumentsObj[key] = value;
+                    });
+                }
+
+                if(argumentsObj.user && argumentsObj.password) {
+                    argumentsObj.auth = Buffer.from(`${argumentsObj.user}:${argumentsObj.password}`).toString('base64');
+                    delete argumentsObj['user'];
+                    delete argumentsObj['password'];
+                }
+            }
+            this.extraArguments = argumentsObj;
         }
     }
 
@@ -176,11 +200,11 @@ class RedirectCommand implements Command {
         }
 
         if(oldUrl.protocol === 'https:') {
-            response = await this.handlerRequest({rejectUnauthorized: false, ...options}, true);
+            response = await this.handlerRequest({rejectUnauthorized: false, ...this.extraArguments, ...options}, true);
         } else {
-            response = await this.handlerRequest(options);
+            response = await this.handlerRequest({...this.extraArguments, ...options});
         }
-        
+
         if (response.statusCode < 300 || response.statusCode >= 400 || response.headers.location !== newUrl.href) {
             console.log(`\x1b[31mThe requested URL ${oldUrl.href} was excepted to redirect to ${newUrl.href}, but the response has code ${response.statusCode} with location ${response.headers.location}\x1b[0m`);
             throw new Error(`Redirect check failed by request ${oldUrl.href}`);

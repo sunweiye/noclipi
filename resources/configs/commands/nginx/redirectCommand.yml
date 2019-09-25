@@ -36,6 +36,11 @@ command:
       type: String
       description: The lines that should be ignored in the excel file. The items should be separated with comma, e.x "1, 3, 5".
 
+    - name: extra-args
+      alias: e
+      type: String
+      description: Set addtional parameters. Used by check mode to set the addtional http(s) options, e.x. the basic authentication
+
   usageContents:
     - header: 'Node Tools Application: nginx redirect'
       content: 'Generate redirect configuration from excel file'
