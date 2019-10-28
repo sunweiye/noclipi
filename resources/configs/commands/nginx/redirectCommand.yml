@@ -25,6 +25,11 @@ command:
       type: String
       description: The prefixes for the url, for example the languages. The items should be separated with comma, e.x "en, de, fr".
 
+    - name: apply-to-sub-pages
+      type: Boolean
+      defaultValue: false
+      description: Should apply the redirect for subpages. If yes, the $ character will be added to the be redirected url. Default is false.
+
     - name: check
       alias: C
       type: Boolean

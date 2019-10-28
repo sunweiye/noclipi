@@ -44,6 +44,10 @@ Examples:
     ```
     ts-node src/index.ts nginx redirect -s ./redirects.xlsx -t ./redirects.conf -P ", de, fr, es, cn" -i "1"
     ```
+- Create redirect configuration from excel file and apply the redirect also to the sub pages :
+    ```
+    ts-node src/index.ts nginx redirect -s ./redirects.xlsx -t ./redirects.conf --apply-to-sub-pages
+    ```
 - Check the redirects, if there work as excepted
     ```
     ts-node src/index.ts nginx redirect -s ./redirects.xlsx -C -P ", de, fr, es, cn" -i "1" -B "https://your.domain/"

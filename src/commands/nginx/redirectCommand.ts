@@ -23,6 +23,10 @@ class RedirectCommand implements Command {
 
     private urlConstructorParameters: Array<any> = [];
 
+    private applyRedirectToSubPages: boolean = false;
+
+    private oldUrlPostfix: string;
+
     private prefixes: Array<string> = [''];
 
     private ignoredLines: Set<Number> = new Set<Number>();
@@ -72,6 +76,9 @@ class RedirectCommand implements Command {
         if (args['base-url']) {
             this.urlConstructorParameters = [args['base-url']];
         }
+
+        this.applyRedirectToSubPages = args['apply-to-sub-pages'];
+        this.oldUrlPostfix = this.applyRedirectToSubPages ? '$' : '';
 
         if (args['extra-args']) {
             let inputArgs:string = args['extra-args'].trim(),
@@ -173,7 +180,7 @@ class RedirectCommand implements Command {
                             new URL(prefix + theNewUrl.pathname + theNewUrl.search, ...urlConstructorParametersForTest)
                         );
                     } else {
-                        this.targetFile.write(`rewrite ^\\${prefix + theOldUrl.pathname.replace(/\./g, '\\.') + theOldUrl.search} ${prefix + theNewUrl.pathname + theNewUrl.search} permanent;\n`);
+                        this.targetFile.write(`rewrite ^\\${prefix + theOldUrl.pathname.replace(/\./g, '\\.') + theOldUrl.search + this.oldUrlPostfix} ${prefix + theNewUrl.pathname + theNewUrl.search} permanent;\n`);
                     }
                 }
             } catch (e) {
