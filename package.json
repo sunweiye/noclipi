@@ -8,7 +8,7 @@
     "command-line-args": "^5.1.1",
     "command-line-usage": "^5.0.5",
     "js-yaml": "^3.13.1",
-    "xlsx": "^0.14.3"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@types/node": "^12.0.8",
